@@ -16,3 +16,4 @@ This is a simple reusable authentication application built using Node/Express/Re
 - [ ] Write tests on the server-side
 - [ ] Write tests on the client-side
 - [ ] Move Refresh Token to Redis DB
+- [ ] Dockerize the application

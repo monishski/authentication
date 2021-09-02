@@ -21,6 +21,16 @@ export const isEmailInUse: CustomValidator = async value => {
   });
 };
 
+export const doesEmailExists: CustomValidator = async value => {
+  return User
+    .findOne({ email: value })
+    .then(user => {
+      if (!user) {
+        return Promise.reject('Invalid credentials [Email doesnt exist]');
+      }
+  });
+}
+
 export const isConfirmPassWordEqual: CustomValidator = (value, { req }) => {
   if (value !== req.body.password) {
     throw new Error("Password confirmation does not match password")

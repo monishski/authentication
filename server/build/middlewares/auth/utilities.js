@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isConfirmPassWordEqual = exports.isEmailInUse = exports.isUsernameInUse = void 0;
+exports.isConfirmPassWordEqual = exports.doesEmailExists = exports.isEmailInUse = exports.isUsernameInUse = void 0;
 var User_1 = require("../../models/User");
 var isUsernameInUse = function (value) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
@@ -62,6 +62,18 @@ var isEmailInUse = function (value) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 exports.isEmailInUse = isEmailInUse;
+var doesEmailExists = function (value) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        return [2 /*return*/, User_1.User
+                .findOne({ email: value })
+                .then(function (user) {
+                if (!user) {
+                    return Promise.reject('Invalid credentials [Email doesnt exist]');
+                }
+            })];
+    });
+}); };
+exports.doesEmailExists = doesEmailExists;
 var isConfirmPassWordEqual = function (value, _a) {
     var req = _a.req;
     if (value !== req.body.password) {

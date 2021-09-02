@@ -35,29 +35,44 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.controller_post_signup = void 0;
+exports.validate_refresh_token = void 0;
 var User_1 = require("../../models/User");
-// Note the user is not automatically logged in (the client will redirect them to /signin)
-var controller_post_signup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, user;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = req.body //note we dont grab confirmPassword because its only there for validation (middleware)
-                , email = _a.email, password = _a.password;
-                user = new User_1.User({ email: email, password: password });
-                return [4 /*yield*/, user.save()
-                    //TODO: Send verification email for confirmation
-                ]; //could this go wrong?
-            case 1:
-                _b.sent(); //could this go wrong?
-                //TODO: Send verification email for confirmation
-                res.status(201).send({ message: "Sign Up successful!" });
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.controller_post_signup = controller_post_signup;
-//TODO: Controller for Username, First Name, Last Name, Description
-//TODO: Controller for Interest Tags
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+// The REFRESH TOKEN is solely for getting a new ACCESS TOKEN,
+// Note, the refresh time is based on fixed time strategy (a new one is ONLY generated when the user signs again)
+var validate_refresh_token = function (req, res, next) {
+    var refreshToken = req.cookies.refresh_token;
+    if (!refreshToken) {
+        res.status(401).send({ error: "Please authenticate [Refresh JWT Missing]" });
+        return;
+    }
+    // Decode Refresh JWT and check if valid (with verify & it exists within the database?)
+    jsonwebtoken_1.default.verify(refreshToken, process.env.JWT_REFRESH_SECRET, function (err, payload) { return __awaiter(void 0, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (err || !payload) {
+                        // If it is not valid (e.g. the Refresh JWT has expired, ask the user the Sign In again to generate a NEW REFRESH JWT) 
+                        res.status(403).send({ error: "Please authenticate [Refresh JWT Invalid]" });
+                        return [2 /*return*/];
+                    }
+                    return [4 /*yield*/, User_1.User.findById(payload.userId)];
+                case 1:
+                    user = _a.sent();
+                    if (user && user.refreshToken !== refreshToken) {
+                        res.status(403).send({ error: "Please authenticate [Refresh JWT doesn't match DB]" });
+                        return [2 /*return*/];
+                    }
+                    req.currentUser = payload;
+                    next();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+};
+exports.validate_refresh_token = validate_refresh_token;

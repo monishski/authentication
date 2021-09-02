@@ -15,6 +15,8 @@ exports.validateEmail = express_validator_1.body("email")
     .isEmail()
     .withMessage('Email must be valid')
     .normalizeEmail()
+    .isLength({ max: 250 })
+    .withMessage('Email must not exceed 250 characters')
     .custom(utilities_1.isEmailInUse);
 exports.validatePassword = express_validator_1.body("password")
     .trim()

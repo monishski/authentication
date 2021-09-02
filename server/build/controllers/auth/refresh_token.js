@@ -36,28 +36,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.controller_post_signup = void 0;
-var User_1 = require("../../models/User");
-// Note the user is not automatically logged in (the client will redirect them to /signin)
-var controller_post_signup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, user;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = req.body //note we dont grab confirmPassword because its only there for validation (middleware)
-                , email = _a.email, password = _a.password;
-                user = new User_1.User({ email: email, password: password });
-                return [4 /*yield*/, user.save()
-                    //TODO: Send verification email for confirmation
-                ]; //could this go wrong?
-            case 1:
-                _b.sent(); //could this go wrong?
-                //TODO: Send verification email for confirmation
-                res.status(201).send({ message: "Sign Up successful!" });
-                return [2 /*return*/];
-        }
+exports.controller_post_refresh_token = void 0;
+var jwt_1 = require("../../utilities/jwt");
+// The sole purpose of this controller to generate a new short-lived access token 
+var controller_post_refresh_token = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var accessToken;
+    return __generator(this, function (_a) {
+        accessToken = jwt_1.generateAccessJWT(req.currentUser.userId);
+        res.status(200).send({ accessToken: accessToken }); //this will be stored in memory (via REACT/REDUX)
+        return [2 /*return*/];
     });
 }); };
-exports.controller_post_signup = controller_post_signup;
-//TODO: Controller for Username, First Name, Last Name, Description
-//TODO: Controller for Interest Tags
+exports.controller_post_refresh_token = controller_post_refresh_token;

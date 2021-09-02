@@ -14,6 +14,8 @@ export const validateEmail: ValidationChain = body("email")
   .isEmail()
   .withMessage('Email must be valid')
   .normalizeEmail()
+  .isLength({ max: 250 })
+  .withMessage('Email must not exceed 250 characters')
   .custom(isEmailInUse)
 
 export const validatePassword: ValidationChain = body("password")

@@ -26,6 +26,7 @@ var express_1 = __importStar(require("express"));
 var mongoose_1 = __importDefault(require("mongoose"));
 var auth_1 = __importDefault(require("./routes/auth"));
 var dotenv_1 = __importDefault(require("dotenv"));
+var cookie_parser_1 = __importDefault(require("cookie-parser"));
 dotenv_1.default.config();
 var app = express_1.default();
 var PORT = process.env.PORT || 3000;
@@ -37,9 +38,15 @@ var MONGO_OPTIONS = {
 };
 mongoose_1.default
     .connect(MONGO_URI, MONGO_OPTIONS)
-    .then(function () { return console.log('[MONGODB LISTENING ON PORT: 27017]'); })
+    .then(function () {
+    // console.log(mongoose.connection.db.collection('User'))
+    console.log('[MONGODB LISTENING ON PORT: 27017]');
+})
     .catch(function (err) { return console.log("[FAILED TO CONNECT TO DATABASE] Error: " + err); });
+// External middlewares
 app.use(express_1.json());
+app.use(cookie_parser_1.default());
+// Routes
 app.use('/api/auth', auth_1.default);
 app.listen(PORT, function () {
     console.log("[EXPRESS LISTENING ON PORT: " + PORT + "]");

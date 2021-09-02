@@ -62,41 +62,93 @@ exports.User = exports.userSchema = void 0;
 var mongoose_1 = __importStar(require("mongoose"));
 var bcrypt_1 = __importDefault(require("bcrypt"));
 exports.userSchema = new mongoose_1.Schema({
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    description: { type: String },
-    password: { type: String, required: true },
-    avatar: { type: String },
-    jwtTokens: {
-        type: [{
-                token: String
-            }]
+    username: {
+        type: String,
+        default: null
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        index: true
+    },
+    firstName: {
+        type: String,
+        default: null
+    },
+    lastName: {
+        type: String,
+        default: null
+    },
+    description: {
+        type: String,
+        default: null
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    avatar: {
+        type: String,
+        default: null
+    },
+    refreshToken: {
+        type: String,
+        default: null //Array for multiple devices
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    autoIndex: false
 });
 exports.userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function () {
-        var user, saltRounds, hashedPassword;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var user, saltRounds, _a, err_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     user = this;
-                    if (!user.isModified('password')) return [3 /*break*/, 2];
+                    if (!user.isModified('password'))
+                        next();
                     saltRounds = 10;
-                    return [4 /*yield*/, bcrypt_1.default.hash(user.password, saltRounds)];
+                    _b.label = 1;
                 case 1:
-                    hashedPassword = _a.sent();
-                    user.password = hashedPassword;
-                    _a.label = 2;
+                    _b.trys.push([1, 3, , 4]);
+                    _a = user;
+                    return [4 /*yield*/, bcrypt_1.default.hash(user.password, saltRounds)]; //or... await and try/catch
                 case 2:
+                    _a.password = _b.sent(); //or... await and try/catch
                     next();
-                    return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 3:
+                    err_1 = _b.sent();
+                    next(err_1);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });
 });
-exports.userSchema.methods;
+// https://stackoverflow.com/questions/65528117/try-to-compare-password-using-mongoose-and-bcrypt-in-typescript
+// Personally, I am not the biggest fan of using callbacks but it does make sense here
+exports.userSchema.methods.comparePasswords = function (password, callback) {
+    return __awaiter(this, void 0, void 0, function () {
+        var isMatch, err_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, bcrypt_1.default.compare(password, this.password)];
+                case 1:
+                    isMatch = _a.sent();
+                    callback(null, isMatch);
+                    return [3 /*break*/, 3];
+                case 2:
+                    err_2 = _a.sent();
+                    callback(err_2, null);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+};
 exports.User = mongoose_1.default.model('Users', exports.userSchema);

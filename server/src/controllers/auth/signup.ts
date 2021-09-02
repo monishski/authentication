@@ -1,20 +1,23 @@
 import { Response, Request } from 'express'
 import { User } from '../../models/User'
-import jwt from 'jsonwebtoken'
+import { generateAccessJWT, generateRefreshJWT } from '../../utilities/jwt'
 
-export const controller_post_signup = async (req: Request, res: Response) => {
-  const { email, password } = req.body 
+interface ISignUpReqBody {
+  email: string,
+  password: string,
+  confirmPassword: string
+}
+
+// Note the user is not automatically logged in (the client will redirect them to /signin)
+export const controller_post_signup = async (req: Request<{}, {}, ISignUpReqBody>, res: Response) => {
+  const { email, password } = req.body //note we dont grab confirmPassword because its only there for validation (middleware)
   const user = new User({ email, password })
-  await user.save()
-  res.status(201).send(user)
+  await user.save() //could this go wrong?
 
-  //TODO: Send back JWT
-  const jwtToken = jwt.sign({
-    id: user._id
-  }, process.env.JWT_SECRET!) 
-  res.status(201).send({ token: jwtToken })
+  //TODO: Send verification email for confirmation
 
-  //TODO: Send confirmation email
+  res.status(201).send({ message: "Sign Up successful!" })
+
 }
 
 //TODO: Controller for Username, First Name, Last Name, Description

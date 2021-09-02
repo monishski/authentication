@@ -1,6 +1,6 @@
 # Authentication [WORK-IN-PROGRESS]
 
-This is a simple reusable authentication application built using Node/Express/React/Redux
+This is a simple reusable authentication application built using Node/Express/React/Redux using TypeScript
 
 ## TO DO:
 

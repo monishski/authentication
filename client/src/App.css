@@ -1,11 +1,338 @@
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   box-sizing: border-box;
   margin: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   margin-bottom: 20px;
   text-transform: uppercase;
+}
+
+:root {
+  --gl-color-primary: #000000;
+  --gl-color-secondary: #ffffff;
+  --gl-color-dark-grey: #767677;
+  --gl-color-validation-error: #e32b2b;
+  --gl-color-validation-success: #00aa55;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+a,
+area,
+button,
+input,
+label,
+select,
+summary,
+textarea {
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100vh;
+}
+
+.form-wrapper {
+  float: left;
+  padding: 30px;
+  border-left: 2px solid black;
+}
+
+.form {
+  width: 500px;
+}
+
+.form-item {
+  position: relative;
+  margin-top: 15px;
+}
+
+.form-input {
+  position: relative;
+  min-height: 50px;
+}
+
+.form-input__field {
+  font-family: Helvetica, Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  background: var(--gl-color-secondary);
+  border: 1px solid var(--gl-color-dark-grey);
+  box-sizing: border-box;
+  color: var(--gl-color-primary);
+  font-size: 16px;
+  line-height: 22px;
+  margin: 0;
+  min-height: 50px;
+  padding: 13px 20px 13px 20px;
+  text-transform: none;
+  width: 100%;
+}
+
+.form-input__field--error {
+  border-bottom: 3px solid var(--gl-color-validation-error);
+}
+
+.form-input__field--success {
+  border-bottom: 3px solid var(--gl-color-validation-success);
+}
+
+.form-input__field--icon {
+  padding-right: 54px;
+}
+
+.form-input__label {
+  background-color: var(--gl-color-secondary);
+  color: var(--gl-color-dark-grey);
+  font-size: 14px;
+  left: 16px;
+  line-height: 20px;
+  padding: 2px 5px;
+  padding-bottom: 0;
+  top: -11px;
+  transform: translateX(0);
+  display: flex;
+  pointer-events: none;
+  position: absolute;
+}
+
+.form-input__label-asterik {
+  background-color: inherit;
+  color: var(--gl-color-validation-error);
+  padding: 0;
+  padding-left: 3px;
+}
+
+.form-input__label-asterik::after {
+  content: "*";
+}
+
+.form-input__icon {
+  position: absolute;
+  right: 20px;
+  top: 17.5px;
+  display: inline-block;
+  height: 15px;
+  vertical-align: text-top;
+  width: 15px;
+}
+
+.form-input__icon--error {
+  fill: var(--gl-color-validation-error);
+}
+
+.form-input__icon--success {
+  fill: var(--gl-color-validation-success);
+}
+
+.form-input__error {
+  line-height: 20px;
+  padding-left: 20px;
+  text-align: left;
+  margin-top: 5px;
+  margin: 10px 0;
+  font-size: 14px;
+  color: var(--gl-color-validation-error);
+  font-weight: 700;
+}
+
+.form-btn {
+  align-items: center;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: flex-start;
+  line-height: 50px;
+  min-height: 50px;
+  padding: 0 21px;
+  margin-top: 5px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: transform 0.3s cubic-bezier(0.3, 0, 0, 1);
+  white-space: nowrap;
+  width: auto;
+}
+
+.form-btn-primary {
+  background-color: var(--gl-color-primary);
+  border-color: var(--gl-color-secondary);
+  color: var(--gl-color-secondary);
+  height: 50px;
+  transform: translate(-3px, -3px);
+  padding: 5px 15px;
+}
+
+.form-btn-primary:hover {
+  border-color: var(--gl-color-dark-grey);
+  color: var(--gl-color-dark-grey);
+}
+
+.form-btn-primary:active {
+  transform: translate(0, 0);
+}
+
+.form-btn-primary::before {
+  border-bottom: 1px solid var(--gl-color-primary);
+  border-left: 1px solid var(--gl-color-primary);
+  bottom: -4px;
+  height: 3px;
+  left: 3px;
+  width: 100%;
+}
+
+.form-btn-primary:active::before {
+  bottom: 0;
+  height: 0;
+  left: 0;
+}
+
+.form-btn-primary::after {
+  border-right: 1px solid var(--gl-color-primary);
+  border-top: 1px solid var(--gl-color-primary);
+  height: 100%;
+  right: -4px;
+  top: 3px;
+  width: 3px;
+}
+
+.form-btn-primary:active::after {
+  right: 0;
+  top: 0;
+  width: 0;
+}
+
+.form-btn-primary::before,
+.form-btn-primary::after {
+  content: "";
+  display: block;
+  position: absolute;
+  transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
+}
+
+.form-btn__content {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.form-btn__arrow {
+  display: flex;
+  margin: 10px;
+  margin-right: 0;
+}
+
+.form-btn__icon {
+  display: inline-block;
+  height: 24px;
+  vertical-align: text-top;
+  width: 24px;
+  fill: white;
+}
+
+.form-btn-primary:hover .form-btn__icon {
+  fill: var(--gl-color-dark-grey);
+}
+
+.form-show-password-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.form-show-password-icon {
+  display: inline-block;
+  height: 24px;
+  vertical-align: text-top;
+  width: 24px;
+}
+
+.form-show-password-btn {
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 700;
+  background-color: transparent;
+  color: var(--gl-color-primary);
+  text-align: left;
+  text-decoration: underline;
+  white-space: unset;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  margin-left: 2px;
+  padding: 3px;
+}
+
+.form-show-password-btn:hover {
+  color: white;
+  background-color: var(--gl-color-primary);
+}
+
+.link {
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: transparent;
+  color: var(--gl-color-primary);
+  margin-left: 5px;
+  padding: 3px;
+}
+
+.link:hover {
+  color: white;
+  background-color: var(--gl-color-primary);
+}
+
+.loader {
+  height: 24px;
+  width: 24px;
+  border-style: solid;
+  border-top-style: solid;
+  border-radius: 50%;
+  border-width: 3px;
+  border-color: black;
+  border-top-color: var(--gl-color-dark-grey);
+  border-top-width: 3px;
+  animation: spinner 1.5s linear infinite;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

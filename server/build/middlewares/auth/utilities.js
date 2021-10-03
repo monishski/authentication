@@ -40,11 +40,9 @@ exports.isConfirmPassWordEqual = exports.doesEmailExists = exports.isEmailInUse 
 var User_1 = require("../../models/User");
 var isUsernameInUse = function (value) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, User_1.User
-                .findOne({ username: value })
-                .then(function (user) {
+        return [2 /*return*/, User_1.User.findOne({ username: value }).then(function (user) {
                 if (user) {
-                    return Promise.reject('Username already in use');
+                    return Promise.reject("Username already in use");
                 }
             })];
     });
@@ -52,11 +50,9 @@ var isUsernameInUse = function (value) { return __awaiter(void 0, void 0, void 0
 exports.isUsernameInUse = isUsernameInUse;
 var isEmailInUse = function (value) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, User_1.User
-                .findOne({ email: value })
-                .then(function (user) {
+        return [2 /*return*/, User_1.User.findOne({ email: value }).then(function (user) {
                 if (user) {
-                    return Promise.reject('Email already in use');
+                    return Promise.reject("Email already in use");
                 }
             })];
     });
@@ -64,11 +60,9 @@ var isEmailInUse = function (value) { return __awaiter(void 0, void 0, void 0, f
 exports.isEmailInUse = isEmailInUse;
 var doesEmailExists = function (value) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, User_1.User
-                .findOne({ email: value })
-                .then(function (user) {
+        return [2 /*return*/, User_1.User.findOne({ email: value }).then(function (user) {
                 if (!user) {
-                    return Promise.reject('Invalid credentials [Email doesnt exist]');
+                    return Promise.reject("Invalid credentials [Email doesnt exist]");
                 }
             })];
     });

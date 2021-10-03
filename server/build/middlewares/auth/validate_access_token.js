@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.validate_access_token = void 0;
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var validate_access_token = function (req, res, next) {
-    var authorization = req.header('Authorization'); //Note ACCESS JWT what will let you access protected resources 
+    var authorization = req.header("Authorization"); //Note ACCESS JWT what will let you access protected resources
     if (authorization) {
-        var _a = authorization.split(' '), _ = _a[0], accessJWT = _a[1];
+        var _a = authorization.split(" "), _ = _a[0], accessJWT = _a[1];
         jsonwebtoken_1.default.verify(accessJWT, process.env.JWT_ACCESS_SECRET, function (err, payload) {
             if (err || !payload) {
                 res.status(403).send({ error: "Please authenticate [JWT Invalid]" });

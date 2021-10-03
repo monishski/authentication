@@ -7,6 +7,9 @@ var validateRequest = function (req, res, next) {
     if (errors.isEmpty()) {
         return next();
     }
-    res.status(400).send(errors.array()); // Dump of errors?
+    // res.status(400).send(errors.array()) // Dump of errors?
+    res.status(400).send({
+        error: "Sign Up Failed - Your email may be invalid/in use or your password doesn't meet our requirement",
+    }); // Dump of errors?
 };
 exports.validateRequest = validateRequest;

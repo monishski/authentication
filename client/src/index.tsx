@@ -34,6 +34,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import App from './App';
 import SignUp from './components/SignUp'
+import SignIn from './components/SignIn'
 // import auth from './store/reducers/auth';
 
 // const store = configureStore({
@@ -49,6 +50,10 @@ ReactDOM.render(
       <Switch>
         <Route path="/signup">
           <SignUp></SignUp>
+        </Route>
+        
+        <Route path="/signin">
+          <SignIn></SignIn>
         </Route>
         <Route path="/">
           <App></App>

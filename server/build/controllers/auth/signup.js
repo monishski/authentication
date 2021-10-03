@@ -44,12 +44,9 @@ var controller_post_signup = function (req, res) { return __awaiter(void 0, void
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _a = req.body //note we dont grab confirmPassword because its only there for validation (middleware)
-                , email = _a.email, password = _a.password;
+                _a = req.body, email = _a.email, password = _a.password;
                 user = new User_1.User({ email: email, password: password });
-                return [4 /*yield*/, user.save()
-                    //TODO: Send verification email for confirmation
-                ]; //could this go wrong?
+                return [4 /*yield*/, user.save()];
             case 1:
                 _b.sent(); //could this go wrong?
                 //TODO: Send verification email for confirmation

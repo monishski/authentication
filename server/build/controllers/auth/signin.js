@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.controller_post_signin = void 0;
 var User_1 = require("../../models/User");
 var jwt_1 = require("../../utilities/jwt");
-// Note: the error response from the 
+// Note: the error response from the
 var controller_post_signin = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, email, password, user;
     return __generator(this, function (_b) {
@@ -49,8 +49,11 @@ var controller_post_signin = function (req, res) { return __awaiter(void 0, void
                 return [4 /*yield*/, User_1.User.findOne({ email: email }).exec()];
             case 1:
                 user = _b.sent();
-                if (!user) { // Not as part of Validation Chain for cosistent error handling 
-                    res.status(400).send({ message: "Invalid credentials [Email is incorrect]" });
+                if (!user) {
+                    // Not as part of Validation Chain for cosistent error handling
+                    res
+                        .status(400)
+                        .send({ message: "Invalid credentials [Email is incorrect]" });
                     return [2 /*return*/];
                 }
                 user.comparePasswords(password, function (err, isMatch) { return __awaiter(void 0, void 0, void 0, function () {
@@ -63,22 +66,23 @@ var controller_post_signin = function (req, res) { return __awaiter(void 0, void
                                     return [2 /*return*/];
                                 }
                                 if (!!isMatch) return [3 /*break*/, 1];
-                                res.status(400).send({ message: "Invalid credentials [Password is incorrect]" });
+                                res
+                                    .status(400)
+                                    .send({ message: "Invalid credentials [Password is incorrect]" });
                                 return [2 /*return*/];
                             case 1:
                                 accessToken = jwt_1.generateAccessJWT(user._id);
                                 refreshToken = jwt_1.generateRefreshJWT(user._id);
                                 user.refreshToken = refreshToken; //Save refreshToken in DB
-                                return [4 /*yield*/, user.save()
-                                    //Save refreshToken in Cookie as HttpOnly & only send back Access Token in body
-                                    //I am not using signedCookies because the JWT already has a SECRET associated with it...
-                                ];
+                                return [4 /*yield*/, user.save()];
                             case 2:
                                 _a.sent();
                                 //Save refreshToken in Cookie as HttpOnly & only send back Access Token in body
                                 //I am not using signedCookies because the JWT already has a SECRET associated with it...
-                                res.status(200)
+                                res
+                                    .status(200)
                                     .cookie("refresh_token", refreshToken, {
+                                    //Note I am not sending back refresh token in the response body, but as cookie to be stored in the browser
                                     httpOnly: true,
                                     secure: process.env.NODE_ENV === "production",
                                 })

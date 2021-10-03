@@ -47,7 +47,9 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var validate_refresh_token = function (req, res, next) {
     var refreshToken = req.cookies.refresh_token;
     if (!refreshToken) {
-        res.status(401).send({ error: "Please authenticate [Refresh JWT Missing]" });
+        res
+            .status(401)
+            .send({ error: "Please authenticate [Refresh JWT Missing]" });
         return;
     }
     // Decode Refresh JWT and check if valid (with verify & it exists within the database?)
@@ -57,15 +59,21 @@ var validate_refresh_token = function (req, res, next) {
             switch (_a.label) {
                 case 0:
                     if (err || !payload) {
-                        // If it is not valid (e.g. the Refresh JWT has expired, ask the user the Sign In again to generate a NEW REFRESH JWT) 
-                        res.status(403).send({ error: "Please authenticate [Refresh JWT Invalid]" });
+                        // If it is not valid (e.g. the Refresh JWT has expired, ask the user the Sign In again to generate a NEW REFRESH JWT)
+                        res
+                            .status(403)
+                            .send({ error: "Please authenticate [Refresh JWT Invalid]" });
                         return [2 /*return*/];
                     }
                     return [4 /*yield*/, User_1.User.findById(payload.userId)];
                 case 1:
                     user = _a.sent();
                     if (user && user.refreshToken !== refreshToken) {
-                        res.status(403).send({ error: "Please authenticate [Refresh JWT doesn't match DB]" });
+                        res
+                            .status(403)
+                            .send({
+                            error: "Please authenticate [Refresh JWT doesn't match DB]",
+                        });
                         return [2 /*return*/];
                     }
                     req.currentUser = payload;

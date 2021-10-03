@@ -64,25 +64,25 @@ var bcrypt_1 = __importDefault(require("bcrypt"));
 exports.userSchema = new mongoose_1.Schema({
     username: {
         type: String,
-        default: null
+        default: null,
     },
     email: {
         type: String,
         required: true,
         unique: true,
-        index: true
+        index: true,
     },
     firstName: {
         type: String,
-        default: null
+        default: null,
     },
     lastName: {
         type: String,
-        default: null
+        default: null,
     },
     description: {
         type: String,
-        default: null
+        default: null,
     },
     password: {
         type: String,
@@ -90,38 +90,40 @@ exports.userSchema = new mongoose_1.Schema({
     },
     avatar: {
         type: String,
-        default: null
+        default: null,
     },
     refreshToken: {
         type: String,
-        default: null //Array for multiple devices
-    }
+        default: null,
+    },
 }, {
     timestamps: true,
-    autoIndex: false
+    autoIndex: false,
 });
-exports.userSchema.pre('save', function (next) {
+exports.userSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function () {
         var user, saltRounds, _a, err_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     user = this;
-                    if (!user.isModified('password'))
+                    if (!user.isModified("password"))
                         next();
                     saltRounds = 10;
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
                     _a = user;
-                    return [4 /*yield*/, bcrypt_1.default.hash(user.password, saltRounds)]; //or... await and try/catch
+                    return [4 /*yield*/, bcrypt_1.default.hash(user.password, saltRounds)];
                 case 2:
                     _a.password = _b.sent(); //or... await and try/catch
                     next();
                     return [3 /*break*/, 4];
                 case 3:
                     err_1 = _b.sent();
-                    next(err_1);
+                    if (err_1 instanceof Error) {
+                        next(err_1);
+                    }
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -144,11 +146,13 @@ exports.userSchema.methods.comparePasswords = function (password, callback) {
                     return [3 /*break*/, 3];
                 case 2:
                     err_2 = _a.sent();
-                    callback(err_2, null);
+                    if (err_2 instanceof Error) {
+                        callback(err_2, null);
+                    }
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     });
 };
-exports.User = mongoose_1.default.model('Users', exports.userSchema);
+exports.User = mongoose_1.default.model("Users", exports.userSchema);

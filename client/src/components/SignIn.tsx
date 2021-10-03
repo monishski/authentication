@@ -1,6 +1,5 @@
 import React, { useState, SyntheticEvent } from "react";
 import { Link } from "react-router-dom";
-import { client } from "../api";
 
 import { ReactComponent as SvgLongRightArrow } from "../assets/long-right-arrow.svg";
 import { ReactComponent as SvgEyeOpen } from "../assets/eye-open.svg";
@@ -9,19 +8,15 @@ import { Spinner } from "../ui/Spinner";
 
 import { useInput } from "../hooks/useInput";
 import { Input } from "./Input";
-import {
-  validateEmail as validateSignUpEmail,
-  validatePassword,
-  validateConfirmPassword,
-} from "../utilities/auth";
+import { validateEmail } from "../utilities/auth";
+import { client } from "../api";
 
-interface ISignUpState {
+interface ISignInState {
   email: string;
   password: string;
-  confirmPassword: string;
 }
 
-export default function SignUp() {
+export default function SignIn() {
   const {
     input: email,
     inputIsValid: emailIsValid,
@@ -42,69 +37,60 @@ export default function SignUp() {
     onInputFocusedHandler: onPasswordFocusedHandler,
   } = useInput();
 
-  const {
-    input: confirmPassword,
-    inputIsValid: confirmPasswordIsValid,
-    inputIsTouched: confirmPasswordIsTouched,
-    inputIsFocused: confirmPasswordIsFocused,
-    onInputChangeHandler: onConfirmPasswordChangeHandler,
-    onInputBlurHandler: onConfirmPasswordBlurHandler,
-    onInputFocusedHandler: onConfirmPasswordFocusedHandler,
-  } = useInput();
-
   const [showPasswordText, setShowPasswordText] = useState(false);
-  const [showSignUpError, setShowSignUpError] = useState(false);
-  const [showSignUpLoading, setShowSignUpLoading] = useState(false);
+  const [showSignInError, setShowSignInError] = useState(false);
+  const [showSignInLoading, setShowSignInLoading] = useState(false);
 
   const onFormSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
     // Show additonal error above button asking to ensure the fields are filled
-    if (!emailIsValid || !passwordIsValid || !confirmPassword) {
+    if (!emailIsValid || !passwordIsValid) {
       return;
     }
 
-    // Send request to sign user up
-    setShowSignUpLoading(true);
+    //Try signing, see if backend throughs any validation errors
+    setShowSignInLoading(true);
     try {
-      const res = await client.post<ISignUpState>("/auth/signup", {
+      const res = await client.post<ISignInState>("/auth/signin", {
         email,
         password,
-        confirmPassword,
       });
-      setShowSignUpLoading(false);
-      setShowSignUpError(false);
+      setShowSignInLoading(false);
+      setShowSignInError(false);
 
       //Store Access Token into Redux store
       // console.log(res);
     } catch (err) {
       //If it throws error, show an additional error above the button with "Incorrect email/password - please check and retry"
-      setShowSignUpError(true);
-      setShowSignUpLoading(false);
+      setShowSignInError(true);
+      setShowSignInLoading(false);
     }
   };
 
-  const onShowPasswordHandler = () => {
+  const onShowPasswordHandler = (e: SyntheticEvent) => {
+    console.log(e);
+    e.preventDefault();
     setShowPasswordText((prevState) => !prevState);
   };
 
   return (
     <div className="form-container">
       <div className="form-wrapper">
-        <h2>Sign Up</h2>
+        <h2>Sign In</h2>
 
         <form className="form" action="POST" onSubmit={onFormSubmit}>
           <Input
             value={email}
             label="Email"
             type="email"
-            autoComplete="off"
+            autoComplete="new-email"
             autoFocus={true}
             inputIsValid={emailIsValid}
             inputIsFocused={emailIsFocused}
             inputIsTouched={emailIsTouched}
             onInputChange={(e) =>
-              onEmailChangeHandler(e, validateSignUpEmail(e.target.value))
+              onEmailChangeHandler(e, validateEmail(e.target.value))
             }
             onInputBlur={onEmailBlurHandler}
             onInputFocused={onEmailFocusedHandler}
@@ -121,7 +107,7 @@ export default function SignUp() {
             )}
             <button
               className="form-show-password-btn"
-              onClick={onShowPasswordHandler}
+              onClick={(e) => onShowPasswordHandler(e)}
             >
               <span className="form-show-password-btn__content">
                 {!showPasswordText ? "SHOW" : "HIDE"}
@@ -133,52 +119,31 @@ export default function SignUp() {
             value={password}
             label="Password"
             type={!showPasswordText ? "password" : "text"}
-            autoComplete="off"
+            autoComplete="new-password"
             autoFocus={false}
             inputIsValid={passwordIsValid}
             inputIsFocused={passwordIsFocused}
             inputIsTouched={passwordIsTouched}
             onInputChange={(e) =>
-              onPasswordChangeHandler(e, validatePassword(e.target.value))
-            }
+              onPasswordChangeHandler(e, e.target.value.length > 0)
+            } //We dont need to verify if they have proper password like SignUp
             onInputBlur={onPasswordBlurHandler}
             onInputFocused={onPasswordFocusedHandler}
             errorEmptyMessage="Please enter a password"
-            errorSafetyMessage="Please enter a valid password that uses 8+ characters, 1 number, 1 special character and at least 1 big and small case letter"
-            errorBoxHeight="40px"
-          />
-          <Input
-            value={confirmPassword}
-            label="Password"
-            type={!showPasswordText ? "password" : "text"}
-            autoComplete="off"
-            autoFocus={false}
-            inputIsValid={confirmPasswordIsValid}
-            inputIsFocused={confirmPasswordIsFocused}
-            inputIsTouched={confirmPasswordIsTouched}
-            onInputChange={(e) =>
-              onConfirmPasswordChangeHandler(
-                e,
-                validateConfirmPassword(e.target.value, password)
-              )
-            }
-            onInputBlur={onConfirmPasswordBlurHandler}
-            onInputFocused={onConfirmPasswordFocusedHandler}
-            errorEmptyMessage="Please confirm your password"
-            errorSafetyMessage="Passwords must match"
+            errorSafetyMessage="Please enter a valid password" //This state is never reached...
             errorBoxHeight="40px"
           />
 
-          {showSignUpError && (
+          {showSignInError && (
             <div className="form-input__error" style={{ paddingLeft: "0" }}>
-              Looks like you already have an account, sign in!
+              Incorrect email/password – please check and retry
             </div>
           )}
 
           <button className="form-btn form-btn-primary">
-            <span className="form-btn__content">Register</span>
+            <span className="form-btn__content">Sign In</span>
             <div className="form-btn__arrow">
-              {showSignUpLoading ? (
+              {showSignInLoading ? (
                 <Spinner />
               ) : (
                 <SvgLongRightArrow className="form-btn__icon"></SvgLongRightArrow>
@@ -187,9 +152,9 @@ export default function SignUp() {
           </button>
 
           <p style={{ marginBottom: "0px" }}>
-            Already have an account?
-            <Link className="link" to="/signin">
-              Sign In
+            Don't have an account?
+            <Link className="link" to="/signup">
+              Sign Up
             </Link>
           </p>
         </form>

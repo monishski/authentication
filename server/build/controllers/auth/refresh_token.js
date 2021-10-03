@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.controller_post_refresh_token = void 0;
 var jwt_1 = require("../../utilities/jwt");
-// The sole purpose of this controller to generate a new short-lived access token 
+// The sole purpose of this controller to generate a new short-lived access token
 var controller_post_refresh_token = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var accessToken;
     return __generator(this, function (_a) {
